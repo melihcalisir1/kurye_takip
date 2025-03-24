@@ -19,12 +19,14 @@ class AuthController extends Controller
         ]);
 
         $validated['password'] = bcrypt($validated['password']);
+        $validated['role'] = $validated['role'] ?? 'musteri';
         $user = User::create($validated);
 
         return response()->json([
             'message' => ucfirst($validated['role']) . ' başarıyla oluşturuldu',
             'user' => $user
-        ]);
+        ]); // ← BU KISIM 201
+
     }
 
 
