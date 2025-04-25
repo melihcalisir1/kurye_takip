@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SirketController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -35,3 +36,6 @@ Route::middleware(['auth:sanctum', 'role:admin'])->post('/admin/create-sirket', 
 
 Route::middleware(['auth:sanctum', 'role:şirket_sahibi'])
     ->post('/sirket/create-kurye', [SirketController::class, 'createKurye']);
+
+Route::middleware(['auth:sanctum', 'role:musteri'])
+    ->post('/orders', [OrderController::class, 'store']);
