@@ -11,7 +11,11 @@ use Illuminate\Support\Facades\Route;
 class RouteServiceProvider extends ServiceProvider
 {
     /**
+<<<<<<< HEAD
      * The path to the "home" route for your application.
+=======
+     * The path to your application's "home" route.
+>>>>>>> 50735df (Kurye Takip projesi: login, rol bazlı yönlendirme, modern arayüz ve seeder eklendi)
      *
      * Typically, users are redirected here after authentication.
      *
@@ -19,6 +23,11 @@ class RouteServiceProvider extends ServiceProvider
      */
     public const HOME = '/home';
 
+<<<<<<< HEAD
+=======
+    protected $apiNamespace = 'App\\Http\\Controllers\\Api';
+
+>>>>>>> 50735df (Kurye Takip projesi: login, rol bazlı yönlendirme, modern arayüz ve seeder eklendi)
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
      */
@@ -45,4 +54,8 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
     }
+<<<<<<< HEAD
 }
+=======
+} 
+>>>>>>> 50735df (Kurye Takip projesi: login, rol bazlı yönlendirme, modern arayüz ve seeder eklendi)

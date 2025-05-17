@@ -1,5 +1,6 @@
 <?php
 
+<<<<<<< HEAD
 use Illuminate\Support\Facades\Facade;
 
 return [
@@ -123,10 +124,23 @@ return [
 
     'key' => env('APP_KEY'),
 
+=======
+return [
+
+    'name' => env('APP_NAME', 'Laravel'),
+    'env' => env('APP_ENV', 'production'),
+    'debug' => (bool) env('APP_DEBUG', false),
+    'url' => env('APP_URL', 'http://localhost'),
+    'timezone' => 'UTC',
+    'locale' => 'en',
+    'fallback_locale' => 'en',
+    'key' => env('APP_KEY'),
+>>>>>>> 50735df (Kurye Takip projesi: login, rol bazlı yönlendirme, modern arayüz ve seeder eklendi)
     'cipher' => 'AES-256-CBC',
 
     /*
     |--------------------------------------------------------------------------
+<<<<<<< HEAD
     | Maintenance Mode Driver
     |--------------------------------------------------------------------------
     |
@@ -152,10 +166,15 @@ return [
     | request to your application. Feel free to add your own services to
     | this array to grant expanded functionality to your applications.
     |
+=======
+    | Service Providers
+    |--------------------------------------------------------------------------
+>>>>>>> 50735df (Kurye Takip projesi: login, rol bazlı yönlendirme, modern arayüz ve seeder eklendi)
     */
 
     'providers' => [
 
+<<<<<<< HEAD
         /*
          * Laravel Framework Service Providers...
          */
@@ -198,11 +217,49 @@ return [
         App\Providers\RouteServiceProvider::class,
 
     ],
+=======
+    /*
+    |--------------------------------------------------------------------------
+    | Laravel Framework Service Providers...
+    |--------------------------------------------------------------------------
+    */
+    Illuminate\Auth\AuthServiceProvider::class,
+    Illuminate\Broadcasting\BroadcastServiceProvider::class,
+    Illuminate\Bus\BusServiceProvider::class,
+    Illuminate\Cache\CacheServiceProvider::class,
+    Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class,
+    Illuminate\Cookie\CookieServiceProvider::class,
+    Illuminate\Database\DatabaseServiceProvider::class,
+    Illuminate\Encryption\EncryptionServiceProvider::class,
+    Illuminate\Filesystem\FilesystemServiceProvider::class, // ← bu hatayı çözen
+    Illuminate\Foundation\Providers\FoundationServiceProvider::class,
+    Illuminate\Hashing\HashServiceProvider::class,
+    Illuminate\Mail\MailServiceProvider::class,
+    Illuminate\Pagination\PaginationServiceProvider::class,
+    Illuminate\Pipeline\PipelineServiceProvider::class,
+    Illuminate\Queue\QueueServiceProvider::class,
+    Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
+    Illuminate\Session\SessionServiceProvider::class,
+    Illuminate\Translation\TranslationServiceProvider::class,
+    Illuminate\Validation\ValidationServiceProvider::class,
+    Illuminate\View\ViewServiceProvider::class,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Service Providers
+    |--------------------------------------------------------------------------
+    */
+    App\Providers\AppServiceProvider::class,
+    App\Providers\RouteServiceProvider::class,
+],
+
+>>>>>>> 50735df (Kurye Takip projesi: login, rol bazlı yönlendirme, modern arayüz ve seeder eklendi)
 
     /*
     |--------------------------------------------------------------------------
     | Class Aliases
     |--------------------------------------------------------------------------
+<<<<<<< HEAD
     |
     | This array of class aliases will be registered when this application
     | is started. However, feel free to register as many as you wish as
@@ -214,4 +271,24 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+=======
+    */
+
+    'aliases' => [
+        'App' => Illuminate\Support\Facades\App::class,
+        'Artisan' => Illuminate\Support\Facades\Artisan::class,
+        'Auth' => Illuminate\Support\Facades\Auth::class,
+        'Cache' => Illuminate\Support\Facades\Cache::class,
+        'Config' => Illuminate\Support\Facades\Config::class,
+        'DB' => Illuminate\Support\Facades\DB::class,
+        'File' => Illuminate\Support\Facades\File::class,
+        'Hash' => Illuminate\Support\Facades\Hash::class,
+        'Log' => Illuminate\Support\Facades\Log::class,
+        'Route' => Illuminate\Support\Facades\Route::class,
+        'Storage' => Illuminate\Support\Facades\Storage::class,
+        'URL' => Illuminate\Support\Facades\URL::class,
+        'Validator' => Illuminate\Support\Facades\Validator::class,
+        'View' => Illuminate\Support\Facades\View::class,
+    ],
+>>>>>>> 50735df (Kurye Takip projesi: login, rol bazlı yönlendirme, modern arayüz ve seeder eklendi)
 ];

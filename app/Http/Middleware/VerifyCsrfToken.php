@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 
 namespace App\Http\Middleware;
@@ -15,3 +16,6 @@ class VerifyCsrfToken extends Middleware
         //
     ];
 }
+=======
+ 
+>>>>>>> 50735df (Kurye Takip projesi: login, rol bazlı yönlendirme, modern arayüz ve seeder eklendi)
