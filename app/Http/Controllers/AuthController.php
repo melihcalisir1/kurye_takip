@@ -21,14 +21,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            $user = Auth::user();
-            if ($user->role === 'admin') {
-                return redirect('/admin');
-            } elseif ($user->role === 'restaurant') {
-                return redirect('/restaurant');
-            } else {
-                return redirect('/courier');
-            }
+            return redirect()->route('admin.dashboard');
         }
 
         return back()->withErrors([
@@ -41,6 +34,6 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login');
+        return redirect('/');
     }
 } 
