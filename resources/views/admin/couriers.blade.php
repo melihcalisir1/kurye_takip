@@ -215,8 +215,19 @@
         </div>
 
         @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @if(is_array(session('success')))
+                    {{ session('success')['message'] }}
+                    @if(isset(session('success')['credentials']))
+                        <hr>
+                        <strong>Giriş Bilgileri:</strong><br>
+                        E-posta: {{ session('success')['credentials']['email'] }}<br>
+                        Şifre: {{ session('success')['credentials']['password'] }}
+                    @endif
+                @else
+                    {{ session('success') }}
+                @endif
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
@@ -251,6 +262,9 @@
                         </td>
                         <td>
                             <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#locationModal{{ $courier->id }}">
+                                    <i class="fas fa-map-marker-alt"></i> Konum
+                                </button>
                                 <a href="#" class="action-btn edit-btn" title="Düzenle" data-bs-toggle="modal" data-bs-target="#editCourierModal{{ $courier->id }}">
                                     <i class="fas fa-edit"></i>
                                 </a>
@@ -305,13 +319,28 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Konum Modal -->
+                    <div class="modal fade" id="locationModal{{ $courier->id }}" tabindex="-1">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">{{ $courier->name }} - Konum</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="map{{ $courier->id }}" style="height: 400px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     @endforeach
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- Yeni Kurye Ekleme Modal -->
+    <!-- Kurye Ekle Modal -->
     <div class="modal fade" id="addCourierModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -319,11 +348,11 @@
                     <h5 class="modal-title">Yeni Kurye Ekle</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form action="{{ route('admin.restaurants.couriers.store', $restaurant) }}" method="POST">
+                <form action="{{ route('admin.restaurants.couriers.store', $restaurant->id) }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label">Kurye Adı</label>
+                            <label class="form-label">Ad Soyad</label>
                             <input type="text" class="form-control" name="name" required>
                         </div>
                         <div class="mb-3">
@@ -331,20 +360,20 @@
                             <input type="tel" class="form-control" name="phone" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Plaka</label>
-                            <input type="text" class="form-control" name="plate" required>
-                        </div>
-                        <div class="mb-3">
                             <label class="form-label">Durum</label>
-                            <select class="form-select" name="status">
+                            <select class="form-select" name="status" required>
                                 <option value="active">Aktif</option>
                                 <option value="inactive">Pasif</option>
                             </select>
                         </div>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Kurye için otomatik olarak bir e-posta ve şifre oluşturulacaktır. Bu bilgiler kurye giriş yapabilmesi için gereklidir.
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                        <button type="submit" class="btn btn-primary">Kaydet</button>
+                        <button type="submit" class="btn btn-primary">Ekle</button>
                     </div>
                 </form>
             </div>
@@ -352,5 +381,41 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+    @foreach($couriers as $courier)
+    function initMap{{ $courier->id }}() {
+        if (!document.getElementById('map{{ $courier->id }}')) return;
+        
+        const position = [{{ $courier->latitude ?? 41.0082 }}, {{ $courier->longitude ?? 28.9784 }}];
+        
+        const map = L.map('map{{ $courier->id }}').setView(position, 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        const marker = L.marker(position).addTo(map);
+        
+        const popup = L.popup()
+            .setContent(`
+                <div>
+                    <h5>{{ $courier->name }}</h5>
+                    <p>Plaka: {{ $courier->plate }}</p>
+                    <p>Durum: {{ $courier->status === 'active' ? 'Aktif' : 'Pasif' }}</p>
+                    <p>Son Güncelleme: {{ $courier->last_location_update ? $courier->last_location_update->format('d.m.Y H:i:s') : 'Bilgi yok' }}</p>
+                </div>
+            `);
+
+        marker.bindPopup(popup);
+    }
+
+    // Modal açıldığında haritayı başlat
+    document.getElementById('locationModal{{ $courier->id }}').addEventListener('shown.bs.modal', function () {
+        initMap{{ $courier->id }}();
+    });
+    @endforeach
+    </script>
 </body>
 </html> 

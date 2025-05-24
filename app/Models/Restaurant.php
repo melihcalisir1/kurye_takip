@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Restaurant extends Model
 {
@@ -11,11 +12,17 @@ class Restaurant extends Model
         'name',
         'phone',
         'address',
-        'status'
+        'status',
+        'user_id'
     ];
 
     public function couriers(): HasMany
     {
         return $this->hasMany(Courier::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 } 

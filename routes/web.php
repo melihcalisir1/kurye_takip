@@ -3,6 +3,8 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\CourierController;
+use App\Http\Controllers\CourierMapController;
+use App\Http\Controllers\MenuController;
 use Illuminate\Support\Facades\Route;
 
 // Auth Routes
@@ -30,7 +32,33 @@ Route::prefix('admin')->group(function () {
     Route::delete('/restaurants/{restaurant}/couriers/{courier}', [CourierController::class, 'destroy'])->name('admin.restaurants.couriers.destroy');
 });
 
+// Restoran Dashboard
+
+
+Route::prefix('restaurant')->name('restaurant.')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('restaurant.dashboard');
+    })->name('dashboard');
+    Route::get('/menus', [MenuController::class, 'index'])->name('menus');
+    Route::get('/menus/create', [MenuController::class, 'create'])->name('menus.create');
+    Route::post('/menus', [MenuController::class, 'store'])->name('menus.store');
+    Route::get('/menus/{menu}/edit', [MenuController::class, 'edit'])->name('menus.edit');
+    Route::put('/menus/{menu}', [MenuController::class, 'update'])->name('menus.update');
+    Route::delete('/menus/{menu}', [MenuController::class, 'destroy'])->name('menus.destroy');
+});
+
+// Kurye Dashboard
+Route::get('/courier/dashboard', function () {
+    return view('courier.dashboard');
+})->name('courier.dashboard');
+
 // Default Route
 Route::get('/', function () {
     return redirect()->route('login');
 });
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/courier-map', [CourierMapController::class, 'index'])->name('courier.map');
+});
+
+

@@ -218,8 +218,19 @@
         </div>
 
         @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @if(is_array(session('success')))
+                    {{ session('success')['message'] }}
+                    @if(isset(session('success')['credentials']))
+                        <hr>
+                        <strong>Giriş Bilgileri:</strong><br>
+                        E-posta: {{ session('success')['credentials']['email'] }}<br>
+                        Şifre: {{ session('success')['credentials']['password'] }}
+                    @endif
+                @else
+                    {{ session('success') }}
+                @endif
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
