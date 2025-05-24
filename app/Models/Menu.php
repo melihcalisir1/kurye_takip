@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Menu extends Model
 {
     protected $fillable = [
+        'restaurant_id',
         'name',
         'description',
         'category',
@@ -19,11 +21,21 @@ class Menu extends Model
         'extras',
         'tags',
         'is_featured',
-        'images',
-        'restaurant_id',
+        'is_active',
+        'images'
     ];
 
     protected $casts = [
+        'price' => 'decimal:2',
+        'discount_price' => 'decimal:2',
+        'calories' => 'integer',
         'is_featured' => 'boolean',
+        'is_active' => 'boolean',
+        'images' => 'array'
     ];
+
+    public function restaurant(): BelongsTo
+    {
+        return $this->belongsTo(Restaurant::class);
+    }
 } 

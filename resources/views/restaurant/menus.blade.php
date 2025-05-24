@@ -31,7 +31,7 @@
                     <div class="card h-100 shadow-sm">
                         @if($menu->images)
                             @php
-                                $images = json_decode($menu->images);
+                                $images = $menu->images;
                                 $firstImage = $images[0] ?? null;
                             @endphp
                             @if($firstImage)

@@ -53,4 +53,24 @@ class User extends Authenticatable
     {
         return $this->hasOne(Courier::class);
     }
+
+    public function hasRole($role): bool
+    {
+        return $this->role === $role;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->hasRole('admin');
+    }
+
+    public function isRestaurant(): bool
+    {
+        return $this->hasRole('restaurant');
+    }
+
+    public function isCourier(): bool
+    {
+        return $this->hasRole('courier');
+    }
 }

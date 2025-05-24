@@ -5,6 +5,7 @@ use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\CourierController;
 use App\Http\Controllers\CourierMapController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 // Auth Routes
@@ -45,12 +46,19 @@ Route::prefix('restaurant')->name('restaurant.')->group(function () {
     Route::get('/menus/{menu}/edit', [MenuController::class, 'edit'])->name('menus.edit');
     Route::put('/menus/{menu}', [MenuController::class, 'update'])->name('menus.update');
     Route::delete('/menus/{menu}', [MenuController::class, 'destroy'])->name('menus.destroy');
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders');
+    Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
 });
 
 // Kurye Dashboard
 Route::get('/courier/dashboard', function () {
     return view('courier.dashboard');
 })->name('courier.dashboard');
+
+// Sipariş Yönetimi
 
 // Default Route
 Route::get('/', function () {

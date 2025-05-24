@@ -95,6 +95,20 @@
         <a href="{{ route('logout') }}" class="nav-link logout-link">
             <i class="fas fa-sign-out-alt"></i> <span>Çıkış</span>
         </a>
+        @if(auth()->check() && auth()->user()->hasRole('restaurant'))
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('restaurant.orders*') ? 'active' : '' }}" 
+                    href="{{ route('restaurant.orders') }}">
+                    <i class="fas fa-shopping-cart"></i> Siparişler
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link btn btn-primary text-white ms-2" 
+                    href="{{ route('restaurant.orders.create') }}">
+                    <i class="fas fa-plus"></i> Yeni Sipariş
+                </a>
+            </li>
+        @endif
     </div>
     <div class="main-content">
         @yield('content')
