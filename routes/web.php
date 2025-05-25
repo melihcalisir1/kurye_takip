@@ -38,7 +38,8 @@ Route::prefix('admin')->group(function () {
 
 Route::prefix('restaurant')->name('restaurant.')->group(function () {
     Route::get('/dashboard', function () {
-        return view('restaurant.dashboard');
+        $restaurant = auth()->user()->restaurant;
+        return view('restaurant.dashboard', compact('restaurant'));
     })->name('dashboard');
     Route::get('/menus', [MenuController::class, 'index'])->name('menus');
     Route::get('/menus/create', [MenuController::class, 'create'])->name('menus.create');
@@ -51,12 +52,17 @@ Route::prefix('restaurant')->name('restaurant.')->group(function () {
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
-});
 
-// Kurye Dashboard
-Route::get('/courier/dashboard', function () {
-    return view('courier.dashboard');
-})->name('courier.dashboard');
+    // Kurye Yönetimi Routes
+    Route::get('/couriers', [\App\Http\Controllers\Restaurant\CourierManagementController::class, 'index'])->name('couriers.index');
+    Route::get('/couriers/create', [\App\Http\Controllers\Restaurant\CourierManagementController::class, 'create'])->name('couriers.create');
+    Route::post('/couriers', [\App\Http\Controllers\Restaurant\CourierManagementController::class, 'store'])->name('couriers.store');
+    Route::get('/couriers/{courier}', [\App\Http\Controllers\Restaurant\CourierManagementController::class, 'show'])->name('couriers.show');
+    Route::get('/couriers/{courier}/edit', [\App\Http\Controllers\Restaurant\CourierManagementController::class, 'edit'])->name('couriers.edit');
+    Route::put('/couriers/{courier}', [\App\Http\Controllers\Restaurant\CourierManagementController::class, 'update'])->name('couriers.update');
+    Route::delete('/couriers/{courier}', [\App\Http\Controllers\Restaurant\CourierManagementController::class, 'destroy'])->name('couriers.destroy');
+    Route::patch('/couriers/{courier}/toggle-status', [\App\Http\Controllers\Restaurant\CourierManagementController::class, 'toggleStatus'])->name('couriers.toggle-status');
+});
 
 // Sipariş Yönetimi
 
@@ -67,6 +73,16 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/courier-map', [CourierMapController::class, 'index'])->name('courier.map');
+});
+
+Route::prefix('courier')->name('courier.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\CourierPanelController::class, 'dashboard'])->name('dashboard');
+    Route::get('/orders/active', [\App\Http\Controllers\CourierPanelController::class, 'activeOrders'])->name('orders.active');
+    Route::get('/orders/delivered', [\App\Http\Controllers\CourierPanelController::class, 'deliveredOrders'])->name('orders.delivered');
+    Route::get('/orders/{order}', [\App\Http\Controllers\CourierPanelController::class, 'showOrder'])->name('orders.show');
+    Route::patch('/orders/{order}/status', [\App\Http\Controllers\CourierPanelController::class, 'updateOrderStatus'])->name('orders.update-status');
+    Route::get('/profile', [\App\Http\Controllers\CourierPanelController::class, 'profile'])->name('profile');
+    Route::post('/profile', [\App\Http\Controllers\CourierPanelController::class, 'updateProfile'])->name('profile.update');
 });
 
 
