@@ -103,7 +103,7 @@
                     </li>
                     
                     <li class="nav-item mt-4">
-                        <form method="POST" action="{{ route('logout') }}">
+                        <form method="GET" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="nav-link border-0 bg-transparent text-white">
                                 <i class="fas fa-sign-out-alt me-2"></i> Çıkış Yap
