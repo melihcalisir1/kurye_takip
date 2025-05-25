@@ -7,20 +7,27 @@ use App\Models\Courier;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CourierManagementController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
-        $restaurant = auth()->user()->restaurant;
+        $userId = auth()->id();
+        $restaurant = \App\Models\Restaurant::where('user_id', $userId)->first();
+
         if (!$restaurant) {
             return redirect()->route('restaurant.dashboard')->with('error', 'Restoran bilgisi bulunamadı!');
         }
+
         $couriers = $restaurant->couriers()->with(['user', 'orders' => function($q) {
             $q->where('status', 'delivered')
               ->whereDate('delivered_at', today());
         }])->get();
-        
+
         return view('restaurant.couriers.index', compact('couriers'));
     }
 
@@ -47,9 +54,12 @@ class CourierManagementController extends Controller
 
         $courier = $user->courier()->create([
             'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
             'phone' => $request->phone,
-            'restaurant_id' => auth()->user()->restaurant->id,
-            'status' => 'active'
+            'plate' => 'PLAKA-' . strtoupper(Str::random(6)),
+            'status' => 'active',
+            'restaurant_id' => \App\Models\Restaurant::where('user_id', auth()->id())->value('id'),
         ]);
 
         return redirect()->route('restaurant.couriers.index')
@@ -58,7 +68,6 @@ class CourierManagementController extends Controller
 
     public function show(Courier $courier)
     {
-        $this->authorize('view', $courier);
         
         $todayDeliveries = $courier->orders()
             ->where('status', 'delivered')
@@ -91,13 +100,11 @@ class CourierManagementController extends Controller
 
     public function edit(Courier $courier)
     {
-        $this->authorize('update', $courier);
         return view('restaurant.couriers.edit', compact('courier'));
     }
 
     public function update(Request $request, Courier $courier)
     {
-        $this->authorize('update', $courier);
         
         $request->validate([
             'name' => 'required|string|max:255',
@@ -124,7 +131,6 @@ class CourierManagementController extends Controller
 
     public function destroy(Courier $courier)
     {
-        $this->authorize('delete', $courier);
         
         $courier->user->delete();
         $courier->delete();
@@ -135,7 +141,6 @@ class CourierManagementController extends Controller
 
     public function toggleStatus(Courier $courier)
     {
-        $this->authorize('update', $courier);
         
         $courier->update([
             'status' => $courier->status === 'active' ? 'inactive' : 'active'

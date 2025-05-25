@@ -38,7 +38,9 @@ Route::prefix('admin')->group(function () {
 
 Route::prefix('restaurant')->name('restaurant.')->group(function () {
     Route::get('/dashboard', function () {
-        $restaurant = auth()->user()->restaurant;
+        $restaurant = \App\Models\Restaurant::where('user_id', auth()->id())
+            ->with('couriers')
+            ->first();
         return view('restaurant.dashboard', compact('restaurant'));
     })->name('dashboard');
     Route::get('/menus', [MenuController::class, 'index'])->name('menus');
@@ -62,6 +64,10 @@ Route::prefix('restaurant')->name('restaurant.')->group(function () {
     Route::put('/couriers/{courier}', [\App\Http\Controllers\Restaurant\CourierManagementController::class, 'update'])->name('couriers.update');
     Route::delete('/couriers/{courier}', [\App\Http\Controllers\Restaurant\CourierManagementController::class, 'destroy'])->name('couriers.destroy');
     Route::patch('/couriers/{courier}/toggle-status', [\App\Http\Controllers\Restaurant\CourierManagementController::class, 'toggleStatus'])->name('couriers.toggle-status');
+
+    // Profilim
+    Route::get('/profile', [\App\Http\Controllers\Restaurant\ProfileController::class, 'show'])->name('profile.show');
+    Route::post('/profile', [\App\Http\Controllers\Restaurant\ProfileController::class, 'update'])->name('profile.update');
 });
 
 // Sipariş Yönetimi

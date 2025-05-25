@@ -14,24 +14,29 @@
         }
         .sidebar {
             min-height: 100vh;
-            background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
-            color: white;
+            background: #22223b;
+            color: #fff;
             padding: 2rem 1rem 1rem 1rem;
             position: fixed;
             left: 0;
             top: 0;
-            width: 230px;
+            width: 220px;
             z-index: 100;
             box-shadow: 2px 0 12px rgba(44,62,80,0.07);
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
         }
         .sidebar .sidebar-title {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 700;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2.2rem;
             letter-spacing: 1px;
+            text-align: center;
+            color: #f2e9e4;
         }
         .sidebar .nav-link {
-            color: white;
+            color: #f2e9e4;
             font-weight: 600;
             font-size: 1.08rem;
             margin-bottom: 1.1rem;
@@ -40,37 +45,76 @@
             display: flex;
             align-items: center;
             gap: 0.8rem;
-            transition: background 0.2s;
+            transition: background 0.18s, color 0.18s;
+            border: none;
         }
         .sidebar .nav-link.active, .sidebar .nav-link:hover {
-            background: rgba(255,255,255,0.18);
+            background: linear-gradient(90deg, #4f8a8b 0%, #08d9d6 100%);
             color: #fff;
+            box-shadow: 0 2px 8px rgba(8,217,214,0.08);
+        }
+        .sidebar .nav-link i {
+            min-width: 22px;
+            text-align: center;
+            font-size: 1.15rem;
         }
         .sidebar .logout-link {
-            margin-top: 2.5rem;
-            color: #fff;
-            opacity: 0.8;
+            margin-top: auto;
+            color: #e07a5f;
+            opacity: 0.85;
+            font-weight: 600;
+            border-radius: 8px;
         }
         .sidebar .logout-link:hover {
             opacity: 1;
-            background: rgba(255,255,255,0.13);
+            background: rgba(224,122,95,0.13);
+            color: #fff;
         }
         .main-content {
-            margin-left: 230px;
+            margin-left: 220px;
             padding: 2.5rem 2rem 1.5rem 2rem;
+            min-height: 100vh;
+            background: #f4f6fb;
         }
         @media (max-width: 900px) {
             .sidebar {
-                width: 70px;
+                width: 60px;
                 padding: 1.2rem 0.3rem;
             }
             .sidebar .sidebar-title, .sidebar .nav-link span {
                 display: none;
             }
             .main-content {
-                margin-left: 70px;
+                margin-left: 60px;
                 padding: 1.2rem 0.5rem;
             }
+            .sidebar .nav-link {
+                justify-content: center;
+                padding: 0.7rem 0.5rem;
+            }
+        }
+        .sidebar .nav-link.btn {
+            background: linear-gradient(90deg, #08d9d6 0%, #4f8a8b 100%);
+            color: #fff;
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+            box-shadow: 0 2px 8px rgba(8,217,214,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 0.7rem 1rem;
+            font-size: 1.08rem;
+            border-radius: 8px;
+        }
+        .sidebar .nav-link.btn:hover {
+            background: linear-gradient(90deg, #4f8a8b 0%, #08d9d6 100%);
+            color: #fff;
+        }
+        .sidebar .nav-link.btn.active,
+        .sidebar .nav-link.btn:focus {
+            background: linear-gradient(90deg, #4f8a8b 0%, #08d9d6 100%);
+            color: #fff;
         }
     </style>
     @stack('styles')
@@ -86,29 +130,25 @@
         <a href="{{ route('restaurant.menus') }}" class="nav-link{{ request()->routeIs('restaurant.menus') ? ' active' : '' }}">
             <i class="fas fa-utensils"></i> <span>Menüler</span>
         </a>
-        <a href="{{ isset($restaurant) ? route('admin.restaurants.couriers.index', $restaurant->id) : '#' }}" class="nav-link{{ request()->is('admin/restaurants/*/couriers') ? ' active' : '' }}">
+        <a href="{{ route('restaurant.couriers.index') }}" class="nav-link{{ request()->routeIs('restaurant.couriers.*') ? ' active' : '' }}">
             <i class="fas fa-motorcycle"></i> <span>Kuryelerim</span>
         </a>
-        <a href="#" class="nav-link">
+        @if(auth()->check() && auth()->user()->hasRole('restaurant'))
+            <a class="nav-link{{ (request()->routeIs('restaurant.orders') || request()->routeIs('restaurant.orders.show')) ? ' active' : '' }}"
+                href="{{ route('restaurant.orders') }}">
+                <i class="fas fa-shopping-cart"></i> <span>Siparişler</span>
+            </a>
+            <a class="nav-link{{ request()->routeIs('restaurant.orders.create') ? ' btn btn-primary text-white' : '' }}"
+                href="{{ route('restaurant.orders.create') }}">
+                <i class="fas fa-plus"></i> <span>Yeni Sipariş</span>
+            </a>
+            <a href="{{ route('restaurant.profile.show') }}" class="nav-link{{ request()->routeIs('restaurant.profile.show') ? ' active' : '' }}">
             <i class="fas fa-user"></i> <span>Profilim</span>
         </a>
+        @endif
         <a href="{{ route('logout') }}" class="nav-link logout-link">
             <i class="fas fa-sign-out-alt"></i> <span>Çıkış</span>
         </a>
-        @if(auth()->check() && auth()->user()->hasRole('restaurant'))
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('restaurant.orders*') ? 'active' : '' }}" 
-                    href="{{ route('restaurant.orders') }}">
-                    <i class="fas fa-shopping-cart"></i> Siparişler
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link btn btn-primary text-white ms-2" 
-                    href="{{ route('restaurant.orders.create') }}">
-                    <i class="fas fa-plus"></i> Yeni Sipariş
-                </a>
-            </li>
-        @endif
     </div>
     <div class="main-content">
         @yield('content')

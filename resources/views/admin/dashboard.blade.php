@@ -1,219 +1,174 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | Kurye Takip</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background: #f8f9fa;
-        }
-        .admin-header {
-            background: linear-gradient(135deg, #007AFF 0%, #00C6FB 100%);
-            padding: 1rem 2rem;
-            color: white;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-        }
-        .admin-title {
-            font-weight: 700;
-            font-size: 1.5rem;
-            margin: 0;
-        }
-        .admin-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        .admin-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .admin-name {
-            font-weight: 600;
-            font-size: 1rem;
-        }
-        .logout-btn {
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            background: rgba(255,255,255,0.1);
-            transition: all 0.3s;
-        }
-        .logout-btn:hover {
-            background: rgba(255,255,255,0.2);
-            color: white;
-        }
-        .content-container {
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .page-title {
-            font-weight: 700;
-            font-size: 1.8rem;
-            color: #2c3e50;
-            margin-bottom: 2rem;
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        .stat-card {
-            background: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            transition: all 0.3s;
-        }
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        .stat-title {
-            font-weight: 600;
-            color: #6c757d;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-        .stat-value {
-            font-weight: 700;
-            font-size: 1.8rem;
-            color: #2c3e50;
-            margin: 0;
-        }
-        .action-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-        .action-btn {
-            background: white;
-            border: none;
-            border-radius: 12px;
-            padding: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            text-decoration: none;
-            color: #2c3e50;
-            font-weight: 600;
-            transition: all 0.3s;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-        }
-        .action-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            color: #2c3e50;
-        }
-        .action-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-        .restaurant-icon {
-            background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
-            color: white;
-        }
-    </style>
-</head>
-<body>
-    <!-- Admin Header -->
-    <header class="admin-header">
-        <div class="container-fluid">
-            <div class="d-flex justify-content-between align-items-center">
-                <h1 class="admin-title">Admin Panel</h1>
-                <div class="admin-info">
-                    <div class="admin-avatar">
-                        <i class="fas fa-user"></i>
+@extends('admin.layout.app')
+
+@section('title', 'Dashboard')
+
+@section('content')
+<div class="dashboard-bg">
+    <div class="container py-4">
+        <div class="welcome-box mb-4">
+            <h1 class="fw-bold mb-1">Hoş geldin, Admin!</h1>
+            <div class="text-muted">Sistemin genel özetini aşağıda bulabilirsin.</div>
+        </div>
+        <div class="row g-4 mb-4">
+            <div class="col-lg-3 col-md-6 col-12">
+                <div class="stat-card2">
+                    <div class="stat-icon2 stat-green">
+                        <i class="fas fa-store"></i>
                     </div>
-                    <span class="admin-name">Admin</span>
-                    <a href="{{ route('logout') }}" class="logout-btn">
-                        <i class="fas fa-sign-out-alt me-2"></i>Çıkış
-                    </a>
+                    <div class="stat-info">
+                        <div class="stat-label">Toplam Restoran</div>
+                        <div class="stat-value2">{{ $stats['totalRestaurants'] }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+                <div class="stat-card2">
+                    <div class="stat-icon2 stat-blue">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label">Aktif Restoran</div>
+                        <div class="stat-value2">{{ $stats['activeRestaurants'] }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+                <div class="stat-card2">
+                    <div class="stat-icon2 stat-red">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label">Pasif Restoran</div>
+                        <div class="stat-value2">{{ $stats['inactiveRestaurants'] }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+                <div class="stat-card2">
+                    <div class="stat-icon2 stat-purple">
+                        <i class="fas fa-motorcycle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label">Toplam Kurye</div>
+                        <div class="stat-value2">{{ $stats['totalCouriers'] }}</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </header>
-
-    <!-- Content -->
-    <div class="content-container">
-        <h2 class="page-title">Dashboard</h2>
-
-        <!-- İstatistikler -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%); color: white;">
+        <div class="row g-4 mt-2">
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ route('admin.restaurants') }}" class="big-action-btn">
                     <i class="fas fa-store"></i>
-                </div>
-                <div class="stat-title">Toplam Restoran</div>
-                <p class="stat-value">{{ $stats['totalRestaurants'] }}</p>
+                    <span>Restoranları ve Kuryeleri Yönet</span>
+                </a>
             </div>
-
-            <div class="stat-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #007AFF 0%, #00C6FB 100%); color: white;">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <div class="stat-title">Aktif Restoran</div>
-                <p class="stat-value">{{ $stats['activeRestaurants'] }}</p>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%); color: white;">
-                    <i class="fas fa-times-circle"></i>
-                </div>
-                <div class="stat-title">Pasif Restoran</div>
-                <p class="stat-value">{{ $stats['inactiveRestaurants'] }}</p>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #9C27B0 0%, #E040FB 100%); color: white;">
-                    <i class="fas fa-motorcycle"></i>
-                </div>
-                <div class="stat-title">Toplam Kurye</div>
-                <p class="stat-value">{{ $stats['totalCouriers'] }}</p>
-            </div>
-        </div>
-
-        <!-- Hızlı İşlemler -->
-        <div class="action-buttons">
-            <a href="{{ route('admin.restaurants') }}" class="action-btn">
-                <div class="action-icon restaurant-icon">
-                    <i class="fas fa-store"></i>
-                </div>
-                <div>
-                    <div style="font-size: 0.9rem; color: #6c757d;">Restoran Yönetimi</div>
-                    <div>Restoranları ve Kuryeleri Yönet</div>
-                </div>
-            </a>
         </div>
     </div>
+</div>
+@endsection
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html> 
+@push('styles')
+<style>
+.dashboard-bg {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8fafc 60%, #e0e7ff 100%);
+    position: relative;
+}
+.welcome-box {
+    background: rgba(255,255,255,0.95);
+    border-radius: 18px;
+    padding: 2rem 2.5rem 1.5rem 2.5rem;
+    box-shadow: 0 4px 24px rgba(44,62,80,0.07);
+    margin-bottom: 2rem;
+}
+.stat-card2 {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(44,62,80,0.08);
+    padding: 2.2rem 1.2rem 1.2rem 1.2rem;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    min-height: 120px;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+.stat-card2:hover {
+    box-shadow: 0 8px 32px rgba(44,62,80,0.13);
+    transform: translateY(-4px) scale(1.03);
+}
+.stat-icon2 {
+    position: absolute;
+    right: 18px;
+    bottom: 10px;
+    font-size: 4.5rem;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+}
+.stat-green { color: #4CAF50; }
+.stat-blue { color: #007AFF; }
+.stat-red { color: #FF6B6B; }
+.stat-purple { color: #9C27B0; }
+.stat-info {
+    position: relative;
+    z-index: 1;
+}
+.stat-label {
+    font-size: 1.1rem;
+    color: #6c757d;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+}
+.stat-value2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #2c3e50;
+    letter-spacing: 1px;
+}
+.big-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    background: linear-gradient(135deg, #007AFF 0%, #00C6FB 100%);
+    color: #fff;
+    border-radius: 14px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 1.3rem 2rem;
+    box-shadow: 0 4px 24px rgba(44,62,80,0.10);
+    text-decoration: none;
+    transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+}
+.big-action-btn i {
+    font-size: 2rem;
+}
+.big-action-btn:hover {
+    background: linear-gradient(135deg, #005bb5 0%, #00b4d8 100%);
+    color: #fff;
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 32px rgba(44,62,80,0.13);
+}
+@media (max-width: 768px) {
+    .welcome-box {
+        padding: 1.2rem 1rem 1rem 1rem;
+    }
+    .stat-card2 {
+        flex-direction: column;
+        align-items: flex-start;
+        min-height: 100px;
+        padding: 1.2rem 0.8rem 1rem 0.8rem;
+    }
+    .stat-icon2 {
+        font-size: 3.2rem;
+        right: 10px;
+        bottom: 6px;
+    }
+    .big-action-btn {
+        font-size: 1rem;
+        padding: 1rem 1.2rem;
+    }
+}
+</style>
+@endpush 
